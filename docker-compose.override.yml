@@ -1,0 +1,9 @@
+version: '3.7'
+
+services:
+  # Override app service config.
+  app:
+    volumes:
+      - ./app:/app
+    ports:
+      - ${APP_PORT}:${APP_PORT}
