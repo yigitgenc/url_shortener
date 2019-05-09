@@ -15,9 +15,10 @@ class TestAppViewsModule(unittest.TestCase):
         })
         self.client = self.app.test_client()
 
-    def tearDown(self):
         with self.app.app_context():
+            db.session.close()
             db.drop_all()
+            db.create_all()
 
     def test_redirect_view_not_found(self):
         response = self.client.get('/cannotFindMe')
