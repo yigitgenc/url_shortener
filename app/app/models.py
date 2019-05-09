@@ -9,6 +9,8 @@ class Url(db.Model):
     """
     Url model.
     """
+    __tablename__ = 'urls'
+
     id = db.Column(db.Integer, primary_key=True)
     url = db.Column(db.String(255), nullable=False, unique=True)
     code = db.Column(db.String(8), nullable=False, unique=True, index=True)
@@ -20,6 +22,8 @@ class Visit(db.Model):
     """
     Visit model.
     """
+    __tablename__ = 'visits'
+
     id = db.Column(db.Integer, primary_key=True)
     url_id = db.Column(db.Integer, db.ForeignKey(Url.id), nullable=False, index=True)
     url = db.relationship("Url", back_populates="visits")
