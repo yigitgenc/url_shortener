@@ -1,6 +1,5 @@
 """Application test views module."""
 
-import json
 import unittest
 
 from app import create_app
@@ -22,28 +21,28 @@ class TestAppViewsModule(unittest.TestCase):
 
     def test_redirect_view_not_found(self):
         response = self.client.get('/cannotFindMe')
-        data = json.loads(response.data)
+        data = response.get_json()
 
         self.assertEqual(response.status_code, 404)
         self.assertIn('error', data)
 
     def test_redirect_view_ok(self):
         response = self.client.post('/shorten', data={'url': 'http://example.com'})
-        data = json.loads(response.data)
+        data = response.get_json()
 
         response = self.client.get('/{}'.format(data['code']))
         self.assertEqual(response.status_code, 302)
 
     def test_shorten_view_bad_request(self):
         response = self.client.post('/shorten', data={'url': 'this-is-not-url'})
-        data = json.loads(response.data)
+        data = response.get_json()
 
         self.assertEqual(response.status_code, 400)
         self.assertIn('error', data)
 
     def test_shorten_view_created(self):
         response = self.client.post('/shorten', data={'url': 'http://example.com'})
-        data = json.loads(response.data)
+        data = response.get_json()
 
         self.assertEqual(response.status_code, 201)
         self.assertIn('url', data)
@@ -55,7 +54,7 @@ class TestAppViewsModule(unittest.TestCase):
     def test_shorten_view_ok(self):
         self.client.post('/shorten', data={'url': 'http://example.com'})
         response = self.client.post('/shorten', data={'url': 'http://example.com'})
-        data = json.loads(response.data)
+        data = response.get_json()
 
         self.assertEqual(response.status_code, 200)
         self.assertIn('url', data)
